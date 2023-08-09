@@ -9,22 +9,25 @@ export const filterActiveUsers = (data: Array<UserWithDate>) => {
   return data.filter((user) => user.Status === "Active");
 };
 
+export const printUserData = (data: Array<UserWithDate>) => {
+  if (data.length < 0) console.log("No active Users");
+  data.forEach((user) =>
+    console.log(
+      `Name: ${user.Name}, Date: ${user.Date}, Favorite Movie: ${user.FavoriteMovie}`
+    )
+  );
+};
+
 export const sortUserData = (
   data: Array<UserWithDate>,
-  propertyName: string,
+  propertyName: keyof UserWithDate,
   order: string
 ) => {
   const sortedData = data.sort((a, b) => {
-    if (
-      a[propertyName as keyof UserWithDate] <
-      b[propertyName as keyof UserWithDate]
-    ) {
+    if (a[propertyName] < b[propertyName]) {
       return -1;
     }
-    if (
-      a[propertyName as keyof UserWithDate] >
-      b[propertyName as keyof UserWithDate]
-    ) {
+    if (a[propertyName] > b[propertyName]) {
       return 1;
     }
     return 0;
