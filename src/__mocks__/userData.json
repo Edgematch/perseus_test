@@ -1,0 +1,26 @@
+[
+    {
+        "Name": "Rocky",
+        "FavoriteFood": "Sushi",
+        "FavoriteMovie": "Back to The Future",
+        "Status": "Inactive"
+    },
+    {
+        "Name": "Miroslav",
+        "FavoriteFood": "Sushi",
+        "FavoriteMovie": "American Psycho",
+        "Status": "Active"
+    },
+    {
+        "Name": "Donny",
+        "FavoriteFood": "Singapore chow mei fun",
+        "FavoriteMovie": "The Princess Bride",
+        "Status": "Inactive"
+    },
+    {
+        "Name": "Matt",
+        "FavoriteFood": "Brisket Tacos",
+        "FavoriteMovie": "The Princess Bride",
+        "Status": "Active"
+    }
+]

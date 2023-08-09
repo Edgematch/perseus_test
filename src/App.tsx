@@ -1,11 +1,16 @@
-import React from 'react';
-// import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import UserTable from "./components/UserTable";
+import userData from "./__mocks__/userData.json";
 
-function App() {
+const App = () => {
+  const userDataCopy = userData;
+
   return (
-    <p>Hello world</p>
+    <>
+      <h1>Users</h1>
+      <UserTable data={userDataCopy} />
+    </>
   );
-}
+};
 
 export default App;
