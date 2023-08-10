@@ -17,3 +17,8 @@ export type UserWithDate = {
 export type UserData = {
   data: User[];
 };
+
+export type SortedItem = {
+  property: keyof UserWithDate;
+  asc: boolean;
+};
