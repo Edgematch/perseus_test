@@ -1,46 +1,164 @@
-# Getting Started with Create React App
+// Name: EDGAR FERNANDO MELARA GUEVARA
+// Development Date: 08/09/ 2023
+// Purpose of the script: Create a small application to display user profiles depending on business logic
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+How to approach this requirement?
 
-## Available Scripts
+- Do you understand the acceptance criteria?
+- Does the feature can be splited into smaller task?
+- How much effort it will take? 
+- Do you need to spike the feature first?
 
-In the project directory, you can run:
 
-### `yarn start`
+To deliver this requirement I created a separate repo with to branches
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The first branch has the code to console.log user data  branch->[feat.consoleLogUserData](https://github.com/Edgematch/perseus_test/tree/feat.consoleLogUserData)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The solution is as follows
 
-### `yarn test`
+I created a component for the main page called Apps.tsx, this is where I call a child component called TableData
+```
+//App.tsx
+import "./App.css";
+import UserTable from "./components/UserTable";
+// import userData from "./__mocks__/userData.json";
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+const App = () => {
+  // const userDataCopy = userData;
+  let rockyObj = {
+    Name: "Rocky",
+    FavoriteFood: "Sushi",
+    FavoriteMovie: "Back to The Future",
+    Status: "Inactive",
+  };
+  let miroslavObj = {
+    Name: "Miroslav",
+    FavoriteFood: "Sushi",
+    FavoriteMovie: "American Psycho",
+    Status: "Active",
+  };
+  let donnyObj = {
+    Name: "Donny",
+    FavoriteFood: "Singapore chow mei fun",
+    FavoriteMovie: "The Princess Bride",
+    Status: "Inactive",
+  };
+  let mattObj = {
+    Name: "Matt",
+    FavoriteFood: "Brisket Tacos",
+    FavoriteMovie: "The Princess Bride",
+    Status: "Active",
+  };
 
-### `yarn build`
+  const userData = [rockyObj, miroslavObj, donnyObj, mattObj];
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  return (
+    <>
+      <h1>Users</h1>
+      <UserTable data={userData} />
+    </>
+  );
+};
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+export default App;
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
 
-### `yarn eject`
+To separate the logic form the componen I created a separted helper file
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+//helpers.ts
+import { User, UserWithDate } from "../../types/User";
+import moment from "moment";
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+export const addDate = (data: Array<User> = []) => {
+  return data.map((user) => ({ ...user, Date: moment().format("L") }));
+};
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+export const filterActiveUsers = (data: Array<UserWithDate>) => {
+  return data.filter((user) => user.Status === "Active");
+};
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+export const printUserData = (data: Array<UserWithDate>) => {
+  if (data.length < 0) console.log("No active Users");
+  data.forEach((user) =>
+    console.log(
+      `Name: ${user.Name}, Date: ${user.Date}, Favorite Movie: ${user.FavoriteMovie}`
+    )
+  );
+};
 
-## Learn More
+export const sortUserData = (
+  data: Array<UserWithDate>,
+  propertyName: keyof UserWithDate,
+  order: string
+) => {
+  const sortedData = data.sort((a, b) => {
+    if (a[propertyName] < b[propertyName]) {
+      return -1;
+    }
+    if (a[propertyName] > b[propertyName]) {
+      return 1;
+    }
+    return 0;
+  });
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  console.log(sortedData);
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  if (order === "descending") {
+    return sortedData.reverse();
+  }
+
+  return sortedData;
+};
+``` 
+
+Typescript types
+```
+//User.ts
+export type User = {
+  Name: string;
+  FavoriteFood: string;
+  FavoriteMovie: string;
+  Status: string;
+  Date?: string;
+};
+
+export type UserWithDate = {
+  Name: string;
+  FavoriteFood: string;
+  FavoriteMovie: string;
+  Status: string;
+  Date: string;
+};
+
+export type UserData = {
+  data: User[];
+};
+```
+
+Finally I use all the helper functions in UserTable component to print userData
+```
+//UserTable.tsx
+
+User
+import { UserData } from "../../types/User";
+import React from "react";
+import {
+  sortUserData,
+  addDate,
+  filterActiveUsers,
+  printUserData,
+} from "./helpers";
+
+const UserTable: React.FC<UserData> = ({ data }) => {
+  const dataWithDates = addDate(data);
+  const activeUsers = filterActiveUsers(dataWithDates);
+  printUserData(activeUsers);
+  return <p>Table</p>;
+};
+
+export default UserTable;
+```
+
+The full feature with the sortable table is in the main branch of the repo ->[Main Branch](https://github.com/Edgematch/perseus_test/tree/main)
